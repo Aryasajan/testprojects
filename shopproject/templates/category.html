@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block metadescription %}
+    {% if category %}
+        {{category.desc|truncatewords:155}}
+    {% else %}
+        welcome to estore here you can buy different items...
+    {% endif %}
+{% endblock %}
+
+{% block title %}
+    {% if category %}
+        {{category.name}} -estore
+    {% else %}
+        see our collections
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    {% if category %}
+       <div>
+           <div class="row my_row_class">
+               <div class="mx-auto">
+               <p>
+                   <a href="{% url 'shopapp:allprocat' %}">our product collection</a>
+               </p>
+           </div>
+       </div>
+       </div>
+
+    {% endif %}
+<div class="max_auto">
+    {% if category %}
+    <img class="my_image" src="{{category.img.url}}" alt="{{category.name}}">
+</div>
+<br>
+<div>
+    <h1 class="text-center my_title">{{category.name}}</h1>
+    <p class="text-justifly">{{category.desc}}</p>
+</div>
+{% else %}
+<div>
+    <img src="{% static 'img/banner2.jpeg' %}" alt="our product" width="1117px" height="200px">
+</div>
+<br>
+<div>
+    <h1 class="text-center my_title">our product collections</h1>
+    <p class="text-justifly">Rehashing is linear, so resize is linear, which might seem bad, since I promised that add
+would be constant time. But remember that we don’t have to resize every time, so add is
+usually constant time and only occasionally linear. The total amount of work to run add n
+times is proportional to n, so the average time of each add is constant time</p>
+</div>
+{% endif %}
+<div class="containter">
+    <div class="row mx_auto">
+    {% for product in products.object_list %}
+    <div class="my_bottom_margin col-9 col-sm-12 col-md-4  col-lg-4">
+        <div class="card text-center" style="min-width:18rem;">
+            <a href="{{product.get_url}}" >
+                <img class="card-img-top my_image " src="{{ product.img.url }}"  alt="{{product.name}}">
+
+            </a>
+            <div class="card-body">
+                <h4>{{product.name}}</h4>
+                <p>{{product.price}}</p>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+    <div class="max-auto">
+        {% if products.paginator.num_pages > 1 %}
+
+        <hr>
+        <div class="text-center">
+            {% for pg in products.paginator.page_range %}
+            <a href="?page={{pg}}" class="btn btn-light btn-sm {% if products.number == pg %} aticte {% endif %}">{{pg}}</a>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    <br>
+</div>
+{% endblock %}
